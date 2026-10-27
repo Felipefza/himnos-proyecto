@@ -1,0 +1,46 @@
+{% load static %}
+
+<div class="container-fluid" style="margin-top: 10rem;">
+    {% if librosAntiguoTestamento %}
+    <div class="container text-center mt-5">
+        <h1>Antiguo Testamento</h1>
+    </div>
+    {% for item in librosAntiguoTestamento %}
+
+    <div class="container mt-5">
+        <h2>{{ item.nombreLibro }}</h2>
+        <hr class="mt-2 mb-3" />
+        <div class="row">
+            {% for index in item.cantidadCapitulos %}
+            <div class="card bg-secondary-subtle d-flex justify-content-center m-2" style="height: 5rem; width: 5rem;">
+                <h4 class="card-title text-center">{{ forloop.counter }}</h4>
+                <a class="stretched-link" href="/biblia/palabra/{{ item.index }}/{{ forloop.counter }}"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% endfor %}
+    {% endif %}
+
+    {% if librosNuevoTestamento %}
+    <div class="container text-center mt-5">
+        <h1>Nuevo Testamento</h1>
+    </div>
+    {% for item in librosNuevoTestamento %}
+
+    <div class="container mt-5">
+        <h2>{{ item.nombreLibro }}</h2>
+        <hr class="mt-2 mb-3" />
+        <div class="row">
+            {% for index in item.cantidadCapitulos %}
+            <div class="card bg-secondary-subtle d-flex justify-content-center m-2" style="height: 5rem; width: 5rem;">
+                <h4 class="card-title text-center">{{ forloop.counter }}</h4>
+                <a class="stretched-link" href="/biblia/palabra/{{ item.index }}/{{ forloop.counter }}"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>

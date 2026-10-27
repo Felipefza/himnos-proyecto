@@ -1,0 +1,58 @@
+<div class="container mt-5 mb-5">
+  <form method="get">
+    <div id="form-inputs" class="form-group row mb-3">
+      <div class="col">
+        <input
+          class="form-control shadow bg-secondary-subtle"
+          type="text"
+          name="numero"
+          placeholder="número: 254"
+          hx-get="{% url obtenerHimnos_url %}"
+          hx-target="#listaHimnos"
+          hx-trigger="load, input"
+          hx-include="form-inputs load, input, button"
+        />
+      </div>
+
+      <div class="col col-md-8 col-lg-9">
+        <input
+          class="form-control shadow bg-secondary-subtle"
+          type="text"
+          name="titulo"
+          placeholder="titulo: las sendas anchas dejaré"
+          hx-get="{% url obtenerHimnos_url %}"
+          hx-target="#listaHimnos"
+          hx-trigger="load, input"
+          hx-include="form-inputs load, input, button"
+        />
+      </div>
+    </div>
+
+    <input
+      class="form-control shadow bg-secondary-subtle"
+      type="text"
+      name="letra"
+      placeholder="letra: no puede el mundo ser mi hogar..."
+      hx-get="{% url obtenerHimnos_url %}"
+      hx-target="#listaHimnos"
+      hx-trigger="load, input"
+      hx-include="form-inputs load, input, button"
+    />
+
+    <div class="container w-100 d-flex flex-row-reverse mt-4">
+      <select
+        class="form-select form-select-sm shadow bg-secondary-subtle"
+        style="width: auto"
+        name="ordenar"
+        hx-get="{% url obtenerHimnos_url %}"
+        hx-target="#listaHimnos"
+        hx-trigger="click load"
+        hx-include="form-inputs load, input, button"
+      >
+        {% for llave, valor in opciones.items %}
+            <option value="{{ llave }}">{{ valor }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+</div>

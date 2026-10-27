@@ -1,0 +1,60 @@
+{% load static %} {% load bootstrap5 %}
+
+<!doctype html>
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        {% bootstrap_javascript %}
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <script>
+        const descartar = () => {
+            window.location.href = "/administrador/";
+        }
+        </script>
+
+        <script src="{% static 'js/apiAdmin/logoutAdmin.js' %}"></script>
+
+        <title>Añadir Himno</title>
+    </head>
+
+    <body>
+        {% include 'apiAdmin/navbar.html' %}
+
+        <main class="container mt-5 mb-5 h-100 w-100 min-vh-100">
+            <form class="container" action="{% url 'ApiAdmin_agregar' %}" method="post">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-auto">
+                        <input class="form-control bg-light shadow" type="text" name="numero" placeholder="Ingrese el Número..." required>
+                    </div>
+                    <div class="col-lg-9 col-md-6 col-auto">
+                        <input class="form-control bg-light shadow" type="text" name="titulo" placeholder="Ingrese el Titulo..." required>
+                    </div>
+                </div>
+
+                <ul id="list-ul" class="list-group list-group-numbered"></ul>
+
+                <div class="container w-100 d-flex justify-content-center mt-5">
+                    <button type="button" class="agregarContenedor btn btn-outline-secondary shadow w-auto justify-self-center" style="border-style: dashed;" onClick="addParrafo()">
+                        Agregar Parrafo
+                    </button>
+                </div>
+
+                <div class="container d-flex flex-row-reverse mt-5">
+                    <button type="button" class="m-3 btn btn-danger" onClick="descartar()">Descartar</button>
+                    <button type="submit" class="m-3 btn btn-success">Guardar Cambios</button>
+                </div>
+            </form>
+        </main>
+
+        {% include 'share/footer.html' %}
+
+        <script src="{% static 'js/apiAdmin/agregarHimnoDrag.js' %}"></script>
+    </body>
+</html>

@@ -1,0 +1,88 @@
+{% load static %} {% load bootstrap5 %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+    <head>
+    	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+
+        <script src="{% static 'js/share/cambiarFontSize.js' %}"></script>
+        <script src="{% static 'js/share/cambiarModo.js' %}"></script>
+
+         {% if numeroVersiculo %}
+    	<title>{{ libroNombre }} {{ numeroCapitulo }} {{ numeroVersiculo }}</title>
+        {% elif versiculoComienzo %}
+       	<title>{{ libroNombre }} {{ numeroCapitulo }} {{ versiculoComienzo }}-{{ versiculoFin }}</title>
+        {% else %}
+       	<title>{{ libroNombre }} {{ numeroCapitulo }}</title>
+        {% endif %}
+
+
+        <script>
+        const irPalabra = (numeroLibro, numeroCapitulo) => {
+            window.location.href = "/biblia/palabra/" + numeroLibro + "/" + numeroCapitulo;
+        }
+        </script>
+    </head>
+
+    <body>
+        {% include 'share/navbar.html' %}
+
+        <div class="container mt-5">
+            <h1 class="text-center">{{ libroNombre }} {{ numeroCapitulo }}</h1>
+        </div>
+
+        <main>
+            <div class="container mt-5 mb-5 h-100 w-100 min-vh-100">
+                <div class="container position-relative mw-100" style="width: 50rem;">
+                    <div class="container d-flex justify-content-center flex-column mw-100" style="width: 40rem;">
+                        {% for versiculos in listaVersiculos  %}
+                            {% if versiculos.titulo %}
+                                <h4 class="fw-bold mt-4 mb-4">{{ versiculos.titulo }}</h4>
+                            {% endif %}
+                            <div class="container">
+                                {% if forloop.first %}
+                                    <p class="fs-5 parrafo" style="text-align: justify;"><span class="fs-1 fw-bold">{{ forloop.counter }} </span>{{ versiculos.palabra }}</p>
+                                {% else %}
+                                    <p class="fs-5 parrafo" style="text-align: justify;"><span class="parrafo fs-5 fw-bold">{{ forloop.counter }} </span>{{ versiculos.palabra }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor  %}
+                    </div>
+
+                    {% if back %}
+                    <button class="position-sticky start-0 btn btn-secondary" name="back" type="submit" style="bottom: 80px;" onClick="irPalabra({{ back.libro }}, {{ back.capitulo }})">
+                        <i class="bi bi-arrow-left-short fs-3"></i>
+                    </button>
+                    {% else %}
+                    <button class="position-sticky start-0 btn btn-secondary" style="bottom: 80px;" disabled>
+                        <i class="bi bi-arrow-left-short fs-3"></i>
+                    </button>
+                    {% endif %}
+
+                    {% if next %}
+                    <button class="position-sticky start-100 btn btn-secondary" name="next" type="submit" style="bottom: 80px;" onClick="irPalabra({{ next.libro }}, {{ next.capitulo }})">
+                        <i class="bi bi-arrow-right-short fs-3"></i>
+                    </button>
+                    {% else %}
+                    <button class="position-sticky start-100 btn btn-secondary" style="bottom: 80px;" disabled>
+                        <i class="bi bi-arrow-right-short fs-3"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+
+
+        <script>
+            adjuntarTextoQuery([".parrafo", ".titulo"])
+        </script>
+        {% include 'share/footer.html' %}
+    </body>
+
+</html>

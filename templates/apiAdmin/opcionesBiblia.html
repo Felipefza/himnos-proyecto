@@ -1,0 +1,207 @@
+{% load bootstrap5 %} {% load bootstrap_icons %} {% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+    <head
+    	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Desactivar Versiculo Activo</title>
+
+        <script src="{% static 'js/apiAdmin/logoutAdmin.js' %}"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <script
+          type="text/javascript"
+          src="{% static 'js/htmx.min.js' %}"
+          defer
+        ></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+
+        <script src="{% static 'js/share/cambiarModo.js' %}"></script>
+    </head>
+
+    <script>
+      const salir = () => {
+        window.location.href = "/administrador/";
+      };
+
+      const desactivar = async (id) => {
+        window.location.href = "/administrador/desactivarVersiculosActivos/";
+      };
+
+      const api = "http://localhost:8000/"
+
+      const obtenerLibro = async () => {
+          const nombreLibro = document.getElementById("nombreLibro");
+          const numeroCapitulo = document.getElementById("numeroCapitulo");
+
+          const data = await fetch(api + "administrador/obtenerCantidadCapitulos/" + nombreLibro.value + "/");
+          const jsonData = await data.json()
+
+          for (var index = 1; index < jsonData.cantidadCapitulos + 1; index++) {
+              const option = document.createElement("option");
+              option.value = index;
+              option.text = index;
+              numeroCapitulo.add(option);
+          }
+      };
+
+      const obtenerVersiculos = async () => {
+          const nombreLibro = document.getElementById("nombreLibro");
+          const numeroCapitulo = document.getElementById("numeroCapitulo");
+          const numeroVersiculoComienzo = document.getElementById("numeroVersiculoComienzo");
+          const numeroVersiculoFin = document.getElementById("numeroVersiculoFin");
+
+          const data = await fetch(api + "administrador/obtenerCantidadVersiculos/" + nombreLibro.value + "/" + numeroCapitulo.value + "/");
+          const jsonData = await data.json()
+
+          for (var index = 1; index < jsonData.cantidadVersiculos + 1; index++) {
+              const firstOption = document.createElement("option");
+              const secondOption = document.createElement("option");
+
+              firstOption.value = index;
+              firstOption.text = index;
+
+              secondOption.value = index;
+              secondOption.text = index;
+
+              numeroVersiculoComienzo.add(firstOption);
+              numeroVersiculoFin.add(secondOption);
+          }
+      }
+
+    const renderCapitulos = async () => {
+        const nombreLibro = document.getElementById("nombreLibro");
+        const numeroCapitulo = document.getElementById("numeroCapitulo");
+
+        const numeroVersiculoComienzo = document.getElementById("numeroVersiculoComienzo");
+        const numeroVersiculoFin = document.getElementById("numeroVersiculoFin");
+
+        const data = await fetch(api + "administrador/obtenerCantidadCapitulos/" + nombreLibro.value + "/");
+        const jsonData = await data.json()
+
+        if (numeroCapitulo !== null) {
+            numeroCapitulo.innerHTML = "";
+            numeroVersiculoComienzo.innerHTML = "";
+            numeroVersiculoFin.innerHTML = "";
+        }
+
+        for (var index = 1; index < jsonData.cantidadCapitulos + 1; index++) {
+            const option = document.createElement("option");
+            option.value = index;
+            option.text = index;
+            numeroCapitulo.add(option);
+        }
+
+        await renderVersiculos(nombreLibro, numeroCapitulo, numeroVersiculoComienzo, numeroVersiculoFin);
+    };
+
+    const renderVersiculos = async (nombreLibro, numeroCapitulo, numeroVersiculoComienzo, numeroVersiculoFin) => {
+        const data = await fetch(api + "administrador/obtenerCantidadVersiculos/" + nombreLibro.value + "/" + numeroCapitulo.value + "/");
+        const jsonData = await data.json()
+
+        for (var index = 1; index < jsonData.cantidadVersiculos + 1; index++) {
+            const firstOption = document.createElement("option");
+            const secondOption = document.createElement("option");
+
+            firstOption.value = index;
+            firstOption.text = index;
+
+            secondOption.value = index;
+            secondOption.text = index;
+
+            numeroVersiculoComienzo.add(firstOption);
+            numeroVersiculoFin.add(secondOption);
+        }
+    }
+
+
+      document.addEventListener("DOMContentLoaded", async () => {
+          await obtenerLibro();
+          await obtenerVersiculos();
+      })
+
+    </script>
+
+  <body>
+    {% include 'apiAdmin/navbar.html' %}
+
+    <div class="d-flex justify-content-center align-items-center w-100 h-100 top-0 start-0 mt-5 mb-5 min-vh-100">
+      <div class="card p-4 shadow bg-secondary-subtle" style="width: 30rem;">
+        <div class="card-body">
+          <div class="container w-100 text-center">
+            {% if hayVersiculoActivo %}
+                <p class="fw-bold fs-4 lh-1">Desactivar Versiculos Activos</p>
+            {% else %}
+                <p class="fw-bold fs-4 lh-1">Activar Versiculos Activos</p>
+            {% endif %}
+            <hr class="m-5" />
+
+
+            <form id="formOpciones" class="form-input row" action="{% url 'ApiAdmin_opcionesBiblia' %}" method="post">
+                {% csrf_token %}
+
+                <div class="row align-items-center input-group mb-4">
+                    <select id="nombreLibro" class="form-select col-auto" name="nombreLibro" onchange="renderCapitulos()">
+                        {% for item in libros %}
+                            {% if forloop.first and item.libro == versiculoActivo.versiculos_activos_comienzo_fk.nombreLibro %}
+                                <option value="{{ versiculoActivo.versiculos_activos_comienzo_fk.nombreLibro }}" selected>{{ versiculoActivo.versiculos_activos_comienzo_fk.libro }}</option>
+                            {% elif forloop.first  %}
+                                <option value="{{ item.nombreLibro }}" selected>{{ item.nombreLibro }}</option>
+                            {% elif item.libro == versiculoActivo.versiculos_activos_comienzo_fk.nombreLibro %}
+                                <option value="{{ versiculoActivo.versiculos_activos_comienzo_fk.nombreLibro }}">{{ versiculoActivo.versiculos_activos_comienzo_fk.libro }}</option>
+                            {% else %}
+                                <option value="{{ item.nombreLibro }}">{{ item.nombreLibro }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <label class="col-auto" for="numeroCapitulo">Capitulo</label>
+
+                    <select id="numeroCapitulo" class="form-select col-auto" name="numeroCapitulo" onchange="renderCapitulos()">
+                        <option value="{{ versiculoActivo.versiculos_activos_comienzo_fk.libro }}">{{ versiculoActivo.versiculos_activos_comienzo_fk.libro }}</option>
+                    </select>
+                </div>
+
+                <div class="row align-items-center input-group mb-4">
+
+                    <label class="col-auto" for="numeroVersiculoComienzo">Del</label>
+
+                    <select id="numeroVersiculoComienzo" class="form-select col-auto" name="numeroVersiculoComienzo">
+                        <option value="{{ versiculoActivo.versiculos_activos_comienzo_fk.versiculo }}">{{ versiculoActivo.versiculos_activos_comienzo_fk.versiculo }}</option>
+                    </select>
+
+                    <label class="col-auto" for="numeroVersiculoFin">Hasta el</label>
+
+                    <select id="numeroVersiculoFin" class="form-select col-auto" name="numeroVersiculoFin">
+                        <option value="{{ versiculoActivo.versiculos_activos_fin_fk.versiculo }}">{{ versiculoActivo.versiculos_activos_fin_fk.versiculo }}</option>
+                    </select>
+                </div>
+
+                <div class="d-flex flex-row-reverse align-items-center input-group mb-4">
+                    <button type="button" class="btn btn-danger col-auto m-3" onClick="salir()">Salir</button>
+
+                    {% if hayVersiculoActivo %}
+                        <button type="button" class="btn btn-danger col-auto m-3" onClick="desactivar()">Desactivar</button>
+                        <button type="submit" class="btn btn-warning">Cambiar</button>
+                    {% else %}
+                        <button type="button" class="btn btn-danger col-auto m-3" onClick="desactivar()" disabled>Desactivar</button>
+                        <button type="submit" class="btn btn-primary">Activar</button>
+                    {% endif %}
+
+                </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {% include 'share/footer.html' %}
+  </body>
+
+</html>

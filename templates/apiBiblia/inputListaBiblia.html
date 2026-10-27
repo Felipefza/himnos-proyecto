@@ -1,0 +1,16 @@
+<div class="container mt-5 mb-5 mw-100" style="width: 40rem;">
+  <form method="get" onsubmit="return false;">
+    <div class="input-group input-group-lg">
+        <input
+            class="form-control shadow bg-secondary-subtle"
+            type="text"
+            name="libro"
+            placeholder="Ingrese el Nombre del Libro"
+            hx-get="{% url 'ApiBiblia_obtenerLibros' %}"
+            hx-target="#listaBiblia"
+            hx-trigger="load, input"
+            hx-include="form-inputs, input, button"
+        />
+      </div>
+  </form>
+</div>

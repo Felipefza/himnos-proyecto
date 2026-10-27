@@ -1,0 +1,48 @@
+{% load static %}
+
+<div class="container-fluid d-flex row g-3 justify-content-center">
+
+  {% if himnoActivo %}
+  <div class="card m-3 shadow bg-secondary-subtle" style="width: 16rem; height: 11.5rem">
+    <div class="card-body text-center ml-2 mr-2 mt-2 mb-4 position-relative">
+      <div class="position-absolute top-0 end-0 border rounded-circle bg-success" style="height: 2rem; width: 2rem;"></div>
+      <p class="parrafo card-title mt-3 fs-6">{{ himnoActivo.numero }}</p>
+
+      <div class="container w-100 mb-2">
+        <div class="border border-dark bg-dark d-inline-block w-25"></div>
+        <img
+          src="{% static 'img/florLoto.png' %}"
+          alt="Logo"
+          style="height: 1.2rem"
+        />
+        <div class="border border-dark bg-dark d-inline-block w-25"></div>
+      </div>
+
+      <p class="parrafo card-text fs-6">{{ himnoActivo.titulo }}</p>
+      <a class="stretched-link" href="/{{ himno_url }}/{{ himnoActivo.himno_id }}"></a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% for item in himnos %}
+  <div class="card m-3 shadow bg-secondary-subtle" style="width: 16rem; height: 11.5rem">
+    <div class="card-body text-center mt-2 mb-4 ml-2 mr-2">
+      <p class="parrafo card-title mt-3 fs-6">{{ item.numero }}</p>
+
+      <div class="container w-100 mb-2">
+        <div class="border border-dark bg-dark d-inline-block w-25"></div>
+        <img
+          src="{% static 'img/florLoto.png' %}"
+          alt="Logo"
+          style="height: 1.2rem"
+        />
+        <div class="border border-dark bg-dark d-inline-block w-25"></div>
+      </div>
+
+      <p class="parrafo card-text fs-6">{{ item.titulo }}</p>
+      <a class="stretched-link" href="/{{ himno_url }}/{{ item.himno_id }}"></a>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>

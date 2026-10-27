@@ -1,0 +1,48 @@
+{% load static %} {% load bootstrap5 %}
+
+<!doctype html>
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+        {% bootstrap_javascript %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <title>Autentificación Administrador</title>
+
+        <script>
+        const cancelar = () => {
+            window.location.href = "/"
+        }
+        </script>
+    </head>
+
+    <body>
+        {% include 'share/navbar.html' %}
+
+        <main class="container mt-5 mb-5 h-100 w-100 min-vh-100 d-flex justify-content-center">
+            <div class="card shadow bg-light h-100">
+                <form class="container p-5" action="{% url 'ApiAdmin_autentificacion' %}" method="get">
+                    <h2 class="mt-5 mb-5 text-center">Autentificación Administrador</h2>
+
+                    <label for="nombre-input">Nombre de Usuario</label>
+                    <input id="nombre-input" class="form-control mb-4" type="text" name="usuario" placeholder="Ingrese el Nombre de Usuario">
+
+                    <label for="contrasena-input">Contraseña</label>
+                    <input id="contrasena-input" class="form-control mb-4" type="password" name="contrasena" placeholder="Ingrese la Contraseña">
+
+                    <div class="container mt-5 d-flex flex-row-reverse">
+                        <button class="btn btn-danger m-3" type="button" onClick="cancelar()">Cancelar</button>
+                        <button class="btn btn-primary m-3" type="submit">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        {% include 'share/footer.html' %}
+
+    </body>
+</html>

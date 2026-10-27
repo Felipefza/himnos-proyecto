@@ -1,0 +1,60 @@
+{% load static %}
+{% load bootstrap_icons %}
+
+<div class="container-fluid d-flex row g-3 justify-content-center">
+
+  <div class="card m-3 shadow bg-secondary-subtle" style="width: 16rem; height: 11.5rem; border-style: dashed;">
+    <div class="card-body text-center mt-2 mb-4 ml-2 mr-2">
+
+      <h6 class="card-title mt-3 mb-3">Añadir Himno</h6>
+
+        {% bs_icon 'plus-circle-dotted' size='4rem' %}
+
+      <a class="stretched-link" href="{% url 'ApiAdmin_agregar' %}"></a>
+    </div>
+  </div>
+
+  {% if himnoActivo %}
+  <div class="card m-3 shadow bg-secondary-subtle" style="width: 16rem; height: 11.5rem">
+    <div class="card-body text-center ml-2 mr-2 mt-2 mb-4 position-relative">
+      <div class="position-absolute top-0 end-0 border rounded-circle bg-success" style="height: 2rem; width: 2rem;"></div>
+      <h6 class="card-title mt-3">{{ himnoActivo.numero }}</h6>
+
+      <div class="container w-100 mb-2">
+        <div class="border border-dark bg-secondary-subtle d-inline-block w-25"></div>
+        <img
+          src="{% static 'img/florLoto.png' %}"
+          alt="Logo"
+          style="height: 1.2rem"
+        />
+        <div class="border border-dark bg-secondary-subtle d-inline-block w-25"></div>
+      </div>
+
+      <h6 class="card-text">{{ himnoActivo.titulo }}</h6>
+      <a class="stretched-link" href="/{{ himno_url }}/{{ himnoActivo.himno_id }}"></a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% for item in himnos %}
+  <div class="card m-3 shadow bg-secondary-subtle" style="width: 16rem; height: 11.5rem">
+    <div class="card-body text-center mt-2 mb-4 ml-2 mr-2">
+      <h6 class="card-title mt-3">{{ item.numero }}</h6>
+
+      <div class="container w-100 mb-2">
+        <div class="border border-dark bg-secondary-subtle d-inline-block w-25"></div>
+        <img
+          src="{% static 'img/florLoto.png' %}"
+          alt="Logo"
+          style="height: 1.2rem"
+        />
+        <div class="border border-dark bg-secondary-subtle d-inline-block w-25"></div>
+      </div>
+
+      <h6 class="card-text">{{ item.titulo }}</h6>
+      <a class="stretched-link" href="/{{ himno_url }}/{{ item.himno_id }}"></a>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
